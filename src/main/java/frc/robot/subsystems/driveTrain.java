@@ -35,8 +35,8 @@ public class driveTrain extends beanieDriveTrain {
      new MotorControllerGroup(new CANSparkMax(0, MotorType.kBrushless ),new CANSparkMax(0, MotorType.kBrushless)));
   }
 
-  @Override
-  public beanieDriveTrain getInstance() {
+  
+  public static driveTrain getInstance() {
       return mDriveTrain;
   }
 
