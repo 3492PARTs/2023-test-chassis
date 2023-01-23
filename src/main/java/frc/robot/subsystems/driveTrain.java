@@ -24,15 +24,20 @@ public class driveTrain extends beanieDriveTrain {
   wheelLinearDistance[] leftWheels = new wheelLinearDistance[2];
   wheelLinearDistance[] rightWheels = new wheelLinearDistance[2];
 
-  DifferentialDriveKinematics dKinematics = new DifferentialDriveKinematics((Double) null); //tbd
+    static CANSparkMax left1 = new CANSparkMax(0, MotorType.kBrushless);
+    static CANSparkMax left2 = new CANSparkMax(1, MotorType.kBrushless);
+
+    static CANSparkMax right1 = new CANSparkMax(2, MotorType.kBrushless);
+    static CANSparkMax right2 = new CANSparkMax(3, MotorType.kBrushless);
+
+  DifferentialDriveKinematics dKinematics = new DifferentialDriveKinematics((Double) 20.0); //tbd
   DifferentialDrivePoseEstimator dEstimator = new DifferentialDrivePoseEstimator(dKinematics, getRotation(), leftDistance(), rightDistance(), null);
   private static driveTrain mDriveTrain = new driveTrain();
     
 
   /** Creates a new driveTrain. */
   public driveTrain() {
-    super(new AHRS() , new MotorControllerGroup(new CANSparkMax(0, MotorType.kBrushless),new CANSparkMax(0, MotorType.kBrushless)),
-     new MotorControllerGroup(new CANSparkMax(0, MotorType.kBrushless ),new CANSparkMax(0, MotorType.kBrushless)));
+    super(new AHRS() , new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));      
   }
 
   
