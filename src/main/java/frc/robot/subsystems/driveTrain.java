@@ -10,11 +10,13 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import PARTSlib2023.PARTS.frc.Utils.Interfaces.beanieDriveTrain;
 import PARTSlib2023.PARTS.frc.Utils.sensors.wheelLinearDistance;
+import PARTSlib2023.PARTS.frc.commands.joystickDrive;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
 public class driveTrain extends beanieDriveTrain {
 
@@ -62,18 +64,31 @@ public class driveTrain extends beanieDriveTrain {
 
   }
 
-  @Override
-  public double leftDistance() {
-      // TODO Auto-generated method stub
-      return wheelAverage(leftWheels);
-  }
+    @Override
+    public double leftDistance() {
+        // TODO Auto-generated method stub
+        return wheelAverage(leftWheels);
+    }
 
 
 
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    dEstimator.update(getRotation(), leftDistance(), rightDistance());
-  }
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        dEstimator.update(getRotation(), leftDistance(), rightDistance());
+    }
+
+    @Override
+    public void autonomousSetup() {
+        // TODO Auto-generated method stub
+        
+        
+    }
+
+    @Override
+    public void teleopSetup() {
+        // TODO Auto-generated method stub
+        this.setDefaultCommand(new joystickDrive(mDriveTrain, RobotContainer.driverController));
+    }
 }
