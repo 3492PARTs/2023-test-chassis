@@ -11,10 +11,13 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import PARTSlib2023.PARTS.frc.Utils.Interfaces.beanieDriveTrain;
 import PARTSlib2023.PARTS.frc.Utils.sensors.wheelLinearDistance;
 import PARTSlib2023.PARTS.frc.commands.joystickDrive;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 
@@ -23,6 +26,7 @@ public class driveTrain extends beanieDriveTrain {
 
   wheelLinearDistance[] leftWheels = new wheelLinearDistance[2];
   wheelLinearDistance[] rightWheels = new wheelLinearDistance[2];
+  private final Field2d m_field = new Field2d();
 
     static CANSparkMax left1 = new CANSparkMax(0, MotorType.kBrushless);
     static CANSparkMax left2 = new CANSparkMax(1, MotorType.kBrushless);
@@ -37,7 +41,8 @@ public class driveTrain extends beanieDriveTrain {
 
   /** Creates a new driveTrain. */
   public driveTrain() {
-    super(new AHRS() , new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));      
+    super(new AHRS() , new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));     
+    SmartDashboard.putData(m_field);
   }
 
   
@@ -96,4 +101,15 @@ public class driveTrain extends beanieDriveTrain {
         // TODO Auto-generated method stub
         this.setDefaultCommand(new joystickDrive(mDriveTrain, RobotContainer.driverController));
     }
+
+
+    public void updatePoseVisually(Pair<Pose2d, Double> pose) {
+
+        dEstimator.addVisionMeasurement(pose.getFirst(), pose.getSecond());
+        m_field.setRobotPose(dEstimator.getEstimatedPosition());
+
+    }
+
+
+
 }
