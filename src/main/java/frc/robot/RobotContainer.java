@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.trajectories.followPath;
 import frc.robot.subsystems.ExampleSubsystem;
 import PARTSlib2023.PARTS.frc.Utils.Controls.beanieController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -65,6 +66,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return followPath.getAutoCommand();
   }
 }

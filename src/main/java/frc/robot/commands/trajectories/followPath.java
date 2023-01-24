@@ -27,8 +27,8 @@ public class followPath {
         // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
     // for every path in the group
     
-    ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("FullAuto", new PathConstraints(1, 1));
-    static PathPlannerTrajectory traj = PathPlanner.loadPath("test", new PathConstraints(1, 1));
+    //ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("new Path", new PathConstraints(1, 1));
+    static PathPlannerTrajectory traj = PathPlanner.loadPath("followPath", new PathConstraints(1, 1));
     static double ks = 0;
     static double kv = 0;
     static double ka = 0;

@@ -151,7 +151,7 @@ public class driveTrain extends beanieDriveTrain {
 
 
     public double getLeftVelocity(){
-        return (leftWheels[0].getVelocity() + leftWheels[1].getVelocity())/2;
+        return -(leftWheels[0].getVelocity() + leftWheels[1].getVelocity())/2;
         }
 
     public double getRightVelocity(){
