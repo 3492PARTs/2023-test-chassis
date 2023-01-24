@@ -59,6 +59,7 @@ public class followPath {
     //Command fullAuto = autoBuilder.fullAuto(pathGroup);
     
     public static Command getAutoCommand(){
+        
         return driveTrain.getInstance().followTrajectoryCommand(traj, false);
     }
 }
