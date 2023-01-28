@@ -72,7 +72,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    driveTrain.getInstance().moveVolts(8, 8);
+  }
 
   @Override
   public void teleopInit() {
