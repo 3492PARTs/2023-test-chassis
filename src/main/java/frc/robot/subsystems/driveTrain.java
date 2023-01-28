@@ -10,12 +10,13 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import PARTSlib2023.PARTS.frc.Utils.Interfaces.SparkMaxDistanceValue;
 import PARTSlib2023.PARTS.frc.Utils.Interfaces.beanieDriveTrain;
-import PARTSlib2023.PARTS.frc.Utils.sensors.wheelLinearDistance;
+
 import PARTSlib2023.PARTS.frc.commands.joystickDrive;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -35,10 +36,7 @@ public class driveTrain extends beanieDriveTrain {
     static CANSparkMax right1 = new CANSparkMax(7, MotorType.kBrushless);
     static CANSparkMax right2 = new CANSparkMax(9, MotorType.kBrushless);
 
-    wheelLinearDistance leftWheels[] = new wheelLinearDistance[]{new wheelLinearDistance(8.01, 6*Math.PI, new SparkMaxDistanceValue(left1)),
-      new wheelLinearDistance(8.01, 6*Math.PI, new SparkMaxDistanceValue(left2))};
-    wheelLinearDistance rightWheels[] = new wheelLinearDistance[]{new wheelLinearDistance(8.01, 6*Math.PI, new SparkMaxDistanceValue(right1)),
-       new wheelLinearDistance(8.01, 6*Math.PI, new SparkMaxDistanceValue(right2)) };
+
   
 
 
@@ -68,25 +66,25 @@ public class driveTrain extends beanieDriveTrain {
   public double rightDistance() {
       // TODO Auto-generated method stub
 
-      return wheelAverage(rightWheels);
+      return Units.inchesToMeters((right1.getEncoder().getPosition() * 6 * Math.PI)/ 8.01);
   }
 
 
-  private double wheelAverage(wheelLinearDistance[] wheelDistances){
+  // private double wheelAverage(wheelLinearDistance[] wheelDistances){
 
-    double average = 0;
-    for(wheelLinearDistance wheelDistance : wheelDistances){
-      average += wheelDistance.getDistanceMeters();
-    }
-    average = average/wheelDistances.length;
-    return average;
+  //   double average = 0;
+  //   for(wheelLinearDistance wheelDistance : wheelDistances){
+  //     average += wheelDistance.getDistanceMeters();
+  //   }
+  //   average = average/wheelDistances.length;
+  //   return average;
 
-  }
+  // }
 
     @Override
     public double leftDistance() {
         // TODO Auto-generated method stub
-        return wheelAverage(leftWheels);
+        return -Units.inchesToMeters((left1.getEncoder().getPosition() * 6 * Math.PI)/ 8.01);
     }
 
 
@@ -96,6 +94,8 @@ public class driveTrain extends beanieDriveTrain {
     public void periodic() {
         // This method will be called once per scheduler run
         dEstimator.update(getRotation(), leftDistance(), rightDistance());
+        System.out.println("left distance" + leftDistance());
+        System.out.println("right distance:"+ rightDistance());
         
     }
 
