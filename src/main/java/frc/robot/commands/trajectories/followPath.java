@@ -28,10 +28,10 @@ public class followPath {
     // for every path in the group
     
     //ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("new Path", new PathConstraints(1, 1));
-    static PathPlannerTrajectory traj = PathPlanner.loadPath("followPath", new PathConstraints(1, 1));
-    static double ks = 0;
-    static double kv = 0;
-    static double ka = 0;
+    static PathPlannerTrajectory traj = PathPlanner.loadPath("New Path", new PathConstraints(1, 1));
+    private static double kv = 1.055;
+    private static double ka = .27947;
+    private static double ks = .2432 ;
     static Subsystem m_dTrain = driveTrain.getInstance();
     private static Map<String, Command> eventMap;
 
@@ -43,7 +43,7 @@ public class followPath {
         driveTrain.getInstance().getKinematics(),
         new SimpleMotorFeedforward(ks, kv, ka),
         driveTrain.getInstance().getWheelSpeedSupplier(),
-        new PIDConstants(1,0,0),
+        new PIDConstants(0,0,0),
         driveTrain.getInstance().getBiConsumer(),
         eventMap,
         driveTrain.getInstance() // The drive subsystem. Used to properly set the requirements of path following commands

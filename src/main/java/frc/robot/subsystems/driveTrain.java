@@ -28,6 +28,7 @@ import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -48,20 +49,17 @@ public class driveTrain extends beanieDriveTrain {
     static CANSparkMax right1 = new CANSparkMax(7, MotorType.kBrushless);
     static CANSparkMax right2 = new CANSparkMax(9, MotorType.kBrushless);
 
-    wheelLinearDistance leftWheels[] = new wheelLinearDistance[]{new wheelLinearDistance(8.01, 6*Math.PI, new SparkMaxDistanceValue(left1)),
-      new wheelLinearDistance(8.01, 6*Math.PI, new SparkMaxDistanceValue(left2))};
-    wheelLinearDistance rightWheels[] = new wheelLinearDistance[]{new wheelLinearDistance(8.01, 6*Math.PI, new SparkMaxDistanceValue(right1)),
-       new wheelLinearDistance(8.01, 6*Math.PI, new SparkMaxDistanceValue(right2)) };
+
   
 
 
 
-  DifferentialDriveKinematics dKinematics = new DifferentialDriveKinematics( 20.0); //tbd
-  DifferentialDrivePoseEstimator dEstimator = new DifferentialDrivePoseEstimator(dKinematics, getRotation(), leftDistance(), rightDistance(), new Pose2d(0.0, 0.0 ,getRotation()));
+  DifferentialDriveKinematics dKinematics = new DifferentialDriveKinematics( Units.inchesToMeters(21.12)); //tbd
+  DifferentialDrivePoseEstimator dEstimator = new DifferentialDrivePoseEstimator(dKinematics, getRotation(), leftDistance(), rightDistance(), new Pose2d(1.0, 3.0 ,getRotation()));
   private static driveTrain mDriveTrain = new driveTrain();
-    private static double kv;
-    private static double ka;
-    private static double ks;
+    private static double kv = 1.055;
+    private static double ka = .27947;
+    private static double ks = .2432 ;
     public  static HashMap<String, Command> eventMap = new HashMap<>();
 
     
@@ -86,7 +84,7 @@ public class driveTrain extends beanieDriveTrain {
   public double rightDistance() {
       // TODO Auto-generated method stub
 
-      return wheelAverage(rightWheels);
+      return Units.inchesToMeters((right1.getEncoder().getPosition() * 6 * Math.PI)/ 8.01);
   }
 
 
@@ -104,7 +102,7 @@ public class driveTrain extends beanieDriveTrain {
     @Override
     public double leftDistance() {
         // TODO Auto-generated method stub
-        return wheelAverage(leftWheels);
+        return -Units.inchesToMeters((left1.getEncoder().getPosition() * 6 * Math.PI)/ 8.01);
     }
 
     public Supplier<Pose2d> getPoseSupplier(){
@@ -126,6 +124,8 @@ public class driveTrain extends beanieDriveTrain {
     public void periodic() {
         // This method will be called once per scheduler run
         dEstimator.update(getRotation(), leftDistance(), rightDistance());
+        System.out.println("x" + dEstimator.getEstimatedPosition().getX());
+        System.out.println("y" + dEstimator.getEstimatedPosition().getY());
         
     }
 
@@ -162,11 +162,11 @@ public class driveTrain extends beanieDriveTrain {
 
 
     public double getLeftVelocity(){
-        return -(leftWheels[0].getVelocity() + leftWheels[1].getVelocity())/2;
+        return -(left1.getEncoder().getVelocity()/10);
         }
 
     public double getRightVelocity(){
-        return (rightWheels[0].getVelocity() + rightWheels[1].getVelocity())/2;
+        return right1.getEncoder().getVelocity()/10;
         }
     
 
@@ -187,8 +187,8 @@ public class driveTrain extends beanieDriveTrain {
         new SimpleMotorFeedforward(ks, kv, ka),
         driveTrain.getInstance().getKinematics(),
         driveTrain.getInstance().getWheelSpeedSupplier(),
-        new PIDController(1, 0, 0), // Left controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-        new PIDController(1, 0, 0),
+        new PIDController(0, 0, 0), // Left controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+        new PIDController(0, 0, 0),
         driveTrain.getInstance().getBiConsumer(),
         this
         );
