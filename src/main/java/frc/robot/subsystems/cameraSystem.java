@@ -14,6 +14,11 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -21,12 +26,18 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class cameraSystem extends SubsystemBase {
   /** Creates a new cameraSystem. */
 
   AprilTagFieldLayout aprilTagFieldLayout;
+  UsbCamera frontCamera = CameraServer.startAutomaticCapture(0);
+  UsbCamera backCamera = CameraServer.startAutomaticCapture(1);
+  VideoSink server = CameraServer.getServer();
+
+
     
   PhotonCamera cam = new PhotonCamera("testCamera");
   Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
@@ -54,7 +65,33 @@ public class cameraSystem extends SubsystemBase {
       }
       robotPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.LOWEST_AMBIGUITY, cam, robotToCam);
 
+      CameraServer.addSwitchedCamera("directionalCamera");
+      
+
+     
+    
+
   }
+
+  public void swapCamera(String cameraDirection){
+    VideoSource cameraToSwitchTo;
+    if(cameraDirection.equals("front")){
+      cameraToSwitchTo = frontCamera;
+    }
+    else if(cameraDirection.equals("back")){
+      cameraToSwitchTo = backCamera;
+    }
+    else{
+      cameraToSwitchTo = frontCamera;
+    }
+
+    CameraServer.getVideo("directionalCamera").setSource(cameraToSwitchTo);
+
+    
+  }
+
+
+   
 
   public Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
     robotPoseEstimator.setReferencePose(prevEstimatedRobotPose);

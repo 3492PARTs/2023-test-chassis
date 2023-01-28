@@ -16,6 +16,7 @@ import com.pathplanner.lib.commands.PPRamseteCommand;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import PARTSlib2023.PARTS.frc.Utils.Interfaces.SparkMaxDistanceValue;
 import PARTSlib2023.PARTS.frc.Utils.Interfaces.beanieDriveTrain;
 import PARTSlib2023.PARTS.frc.Utils.sensors.wheelLinearDistance;
 import PARTSlib2023.PARTS.frc.commands.joystickDrive;
@@ -28,6 +29,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,18 +39,25 @@ import frc.robot.RobotContainer;
 public class driveTrain extends beanieDriveTrain {
 
 
-  wheelLinearDistance[] leftWheels = new wheelLinearDistance[2];
-  wheelLinearDistance[] rightWheels = new wheelLinearDistance[2];
+
   private final Field2d m_field = new Field2d();
 
-    static CANSparkMax left1 = new CANSparkMax(0, MotorType.kBrushless);
-    static CANSparkMax left2 = new CANSparkMax(1, MotorType.kBrushless);
+    static CANSparkMax left1 = new CANSparkMax(10, MotorType.kBrushless);
+    static CANSparkMax left2 = new CANSparkMax(20, MotorType.kBrushless);
 
-    static CANSparkMax right1 = new CANSparkMax(2, MotorType.kBrushless);
-    static CANSparkMax right2 = new CANSparkMax(3, MotorType.kBrushless);
+    static CANSparkMax right1 = new CANSparkMax(7, MotorType.kBrushless);
+    static CANSparkMax right2 = new CANSparkMax(9, MotorType.kBrushless);
 
-  DifferentialDriveKinematics dKinematics = new DifferentialDriveKinematics((Double) 20.0); //tbd
-  DifferentialDrivePoseEstimator dEstimator = new DifferentialDrivePoseEstimator(dKinematics, getRotation(), leftDistance(), rightDistance(), null);
+    wheelLinearDistance leftWheels[] = new wheelLinearDistance[]{new wheelLinearDistance(8.01, 6*Math.PI, new SparkMaxDistanceValue(left1)),
+      new wheelLinearDistance(8.01, 6*Math.PI, new SparkMaxDistanceValue(left2))};
+    wheelLinearDistance rightWheels[] = new wheelLinearDistance[]{new wheelLinearDistance(8.01, 6*Math.PI, new SparkMaxDistanceValue(right1)),
+       new wheelLinearDistance(8.01, 6*Math.PI, new SparkMaxDistanceValue(right2)) };
+  
+
+
+
+  DifferentialDriveKinematics dKinematics = new DifferentialDriveKinematics( 20.0); //tbd
+  DifferentialDrivePoseEstimator dEstimator = new DifferentialDrivePoseEstimator(dKinematics, getRotation(), leftDistance(), rightDistance(), new Pose2d(0.0, 0.0 ,getRotation()));
   private static driveTrain mDriveTrain = new driveTrain();
     private static double kv;
     private static double ka;
@@ -60,7 +69,7 @@ public class driveTrain extends beanieDriveTrain {
   /** Creates a new driveTrain. */
   public driveTrain() {
     super(new AHRS() , new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));     
-    SmartDashboard.putData(m_field);
+    Shuffleboard.getTab("primary").add(m_field);
   }
 
   
@@ -117,6 +126,7 @@ public class driveTrain extends beanieDriveTrain {
     public void periodic() {
         // This method will be called once per scheduler run
         dEstimator.update(getRotation(), leftDistance(), rightDistance());
+        
     }
 
     @Override
@@ -146,6 +156,7 @@ public class driveTrain extends beanieDriveTrain {
 
         dEstimator.addVisionMeasurement(pose.getFirst(), pose.getSecond());
         m_field.setRobotPose(dEstimator.getEstimatedPosition());
+      
 
     }
 
