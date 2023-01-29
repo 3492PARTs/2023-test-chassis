@@ -80,6 +80,9 @@ public class driveTrain extends beanieDriveTrain {
       return dEstimator.getEstimatedPosition();
   }
 
+      /**
+     * @return in meters
+     */
   @Override
   public double rightDistance() {
       // TODO Auto-generated method stub
@@ -99,6 +102,9 @@ public class driveTrain extends beanieDriveTrain {
 
   }
 
+    /**
+     * @return in meters
+     */
     @Override
     public double leftDistance() {
         // TODO Auto-generated method stub
@@ -110,6 +116,10 @@ public class driveTrain extends beanieDriveTrain {
         return s;
     }
 
+    /**
+     * 
+     * @return dKinematics is in meters
+     */
     public DifferentialDriveKinematics getKinematics() {
         return dKinematics;
     }
@@ -161,10 +171,17 @@ public class driveTrain extends beanieDriveTrain {
     }
 
 
+    /**
+     * 
+     * @return in rotations per second
+     */
     public double getLeftVelocity(){
         return -(left1.getEncoder().getVelocity()/60);
         }
-
+        /**
+         * 
+         * @return in rotations per second
+         */
     public double getRightVelocity(){
         return right1.getEncoder().getVelocity()/60;
         }
@@ -173,7 +190,10 @@ public class driveTrain extends beanieDriveTrain {
 
 
 
-    
+    /**
+     * 
+     * @return in meters per second
+     */
   public Supplier<DifferentialDriveWheelSpeeds> getWheelSpeedSupplier(){
     Supplier<DifferentialDriveWheelSpeeds> s = () -> new DifferentialDriveWheelSpeeds((Units.inchesToMeters(getLeftVelocity() * 6*Math.PI)/8.01), (Units.inchesToMeters(getRightVelocity()* 6*Math.PI)/8.01));
     return s;
