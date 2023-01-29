@@ -162,11 +162,11 @@ public class driveTrain extends beanieDriveTrain {
 
 
     public double getLeftVelocity(){
-        return -(left1.getEncoder().getVelocity()/10);
+        return -(left1.getEncoder().getVelocity()/60);
         }
 
     public double getRightVelocity(){
-        return right1.getEncoder().getVelocity()/10;
+        return right1.getEncoder().getVelocity()/60;
         }
     
 
@@ -175,7 +175,7 @@ public class driveTrain extends beanieDriveTrain {
 
     
   public Supplier<DifferentialDriveWheelSpeeds> getWheelSpeedSupplier(){
-    Supplier<DifferentialDriveWheelSpeeds> s = () -> new DifferentialDriveWheelSpeeds((getLeftVelocity() * 6*Math.PI)/8.01, (getRightVelocity()* 6*Math.PI)/8.01);
+    Supplier<DifferentialDriveWheelSpeeds> s = () -> new DifferentialDriveWheelSpeeds((Units.inchesToMeters(getLeftVelocity() * 6*Math.PI)/8.01), (Units.inchesToMeters(getRightVelocity()* 6*Math.PI)/8.01));
     return s;
  }
  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
