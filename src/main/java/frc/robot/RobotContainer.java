@@ -9,6 +9,12 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.trajectories.followPath;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.driveTrain;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import PARTSlib2023.PARTS.frc.Utils.Controls.beanieController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -64,8 +70,10 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  static PathPlannerTrajectory traj = PathPlanner.loadPath("New Path", new PathConstraints(1, 1));
+
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return followPath.getAutoCommand();
+    return driveTrain.getInstance().followTrajectoryCommand(traj, true);
   }
 }

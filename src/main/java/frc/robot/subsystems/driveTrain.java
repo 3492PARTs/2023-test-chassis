@@ -43,11 +43,11 @@ public class driveTrain extends beanieDriveTrain {
 
   private final Field2d m_field = new Field2d();
 
-    static CANSparkMax left1 = new CANSparkMax(10, MotorType.kBrushless);
-    static CANSparkMax left2 = new CANSparkMax(20, MotorType.kBrushless);
+    static CANSparkMax left1 = new CANSparkMax(7, MotorType.kBrushless);
+    static CANSparkMax left2 = new CANSparkMax(9, MotorType.kBrushless);
 
-    static CANSparkMax right1 = new CANSparkMax(7, MotorType.kBrushless);
-    static CANSparkMax right2 = new CANSparkMax(9, MotorType.kBrushless);
+    static CANSparkMax right1 = new CANSparkMax(10, MotorType.kBrushless);
+    static CANSparkMax right2 = new CANSparkMax(20, MotorType.kBrushless);
 
 
   
@@ -125,6 +125,7 @@ public class driveTrain extends beanieDriveTrain {
     }
 
     public void resetPose(Pose2d newPose){
+        
         dEstimator.resetPosition(getRotation(), leftDistance(), rightDistance(), newPose);
     }
 
@@ -142,6 +143,7 @@ public class driveTrain extends beanieDriveTrain {
     @Override
     public void autonomousSetup() {
         // TODO Auto-generated method stub
+        
         
         
     }
@@ -199,6 +201,10 @@ public class driveTrain extends beanieDriveTrain {
     return s;
  }
  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+
+  if(isFirstPath){
+    this.resetPose(traj.getInitialPose());
+  }
 
      PPRamseteCommand controller1 = new PPRamseteCommand(
         traj,

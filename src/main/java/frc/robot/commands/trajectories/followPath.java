@@ -43,7 +43,7 @@ public class followPath {
         driveTrain.getInstance().getKinematics(),
         new SimpleMotorFeedforward(ks, kv, ka),
         driveTrain.getInstance().getWheelSpeedSupplier(),
-        new PIDConstants(0,0,0),
+        new PIDConstants(.01,0,0),
         driveTrain.getInstance().getBiConsumer(),
         eventMap,
         driveTrain.getInstance() // The drive subsystem. Used to properly set the requirements of path following commands
