@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.autoLevel;
 import frc.robot.commands.trajectories.followPath;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.driveTrain;
@@ -74,6 +75,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return driveTrain.getInstance().followTrajectoryCommand(traj, true);
+    return new autoLevel();
+    //return driveTrain.getInstance().followTrajectoryCommand(traj, true);
   }
 }
