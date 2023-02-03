@@ -18,6 +18,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import PARTSlib2023.PARTS.frc.Utils.Interfaces.SparkMaxDistanceValue;
 import PARTSlib2023.PARTS.frc.Utils.Interfaces.beanieDriveTrain;
+import PARTSlib2023.PARTS.frc.Utils.logging.Logger;
 import PARTSlib2023.PARTS.frc.Utils.sensors.wheelLinearDistance;
 import PARTSlib2023.PARTS.frc.commands.joystickDrive;
 import edu.wpi.first.math.Pair;
@@ -49,6 +50,8 @@ public class driveTrain extends beanieDriveTrain {
     static CANSparkMax right1 = new CANSparkMax(10, MotorType.kBrushless);
     static CANSparkMax right2 = new CANSparkMax(20, MotorType.kBrushless);
 
+    
+
 
   
 
@@ -61,6 +64,7 @@ public class driveTrain extends beanieDriveTrain {
     private static double ka = .27947;
     private static double ks = .2432 ;
     public  static HashMap<String, Command> eventMap = new HashMap<>();
+    
 
     
 
@@ -137,6 +141,19 @@ public class driveTrain extends beanieDriveTrain {
         dEstimator.update(getRotation(), leftDistance(), rightDistance());
         System.out.println("x" + dEstimator.getEstimatedPosition().getX());
         System.out.println("y" + dEstimator.getEstimatedPosition().getY());
+        StringBuilder sBuilder = new StringBuilder();
+        sBuilder.append("leftDistance," + leftDistance() + ",");
+        sBuilder.append("rightDistance," + rightDistance()+ ",");
+        sBuilder.append("angle," + getRotation().getDegrees() + ",");
+        sBuilder.append("leftVelocity," + getLeftVelocity() + ",");
+        sBuilder.append("rightVelocity," + getRightVelocity() + ",");
+        sBuilder.append("displacement" + Math.sqrt(Math.pow(dEstimator.getEstimatedPosition().getX(), 2) + Math.pow(dEstimator.getEstimatedPosition().getY(), 2)) + ",");
+        
+        Logger.info(sBuilder.toString());
+
+        Logger.flush();
+
+
         
     }
 
