@@ -39,7 +39,7 @@ public class cameraSystem extends SubsystemBase {
 
 
     
-  PhotonCamera cam = new PhotonCamera("testCamera");
+  PhotonCamera cam = new PhotonCamera("OV5647");
   Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
   PhotonPoseEstimator robotPoseEstimator;
 
@@ -58,7 +58,7 @@ public class cameraSystem extends SubsystemBase {
   public cameraSystem() {
     camList.add(new Pair<PhotonCamera, Transform3d>(cam, robotToCam));
     try {
-      aprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFields.kDefaultField.m_resourceFile);
+      aprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFields.kDefaultField.toString());
     
       } catch (Exception e) {
         // TODO: handle exception

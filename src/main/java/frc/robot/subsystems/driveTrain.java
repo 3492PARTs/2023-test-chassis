@@ -42,14 +42,14 @@ import frc.robot.RobotContainer;
 public class driveTrain extends beanieDriveTrain {
 
 
-
+ 
   private final Field2d m_field = new Field2d();
 
-    static CANSparkMax left1 = new CANSparkMax(7, MotorType.kBrushless);
-    static CANSparkMax left2 = new CANSparkMax(9, MotorType.kBrushless);
+    static CANSparkMax left1 = new CANSparkMax(18, MotorType.kBrushless);
+    static CANSparkMax left2 = new CANSparkMax(23, MotorType.kBrushless);
 
-    static CANSparkMax right1 = new CANSparkMax(10, MotorType.kBrushless);
-    static CANSparkMax right2 = new CANSparkMax(20, MotorType.kBrushless);
+    static CANSparkMax right1 = new CANSparkMax(24, MotorType.kBrushless);
+    static CANSparkMax right2 = new CANSparkMax(12, MotorType.kBrushless);
 
     
 
@@ -140,8 +140,10 @@ public class driveTrain extends beanieDriveTrain {
     public void periodic() {
         // This method will be called once per scheduler run
         dEstimator.update(getRotation(), leftDistance(), rightDistance());
-        System.out.println("x" + dEstimator.getEstimatedPosition().getX());
-        System.out.println("y" + dEstimator.getEstimatedPosition().getY());
+        System.out.println(dEstimator.getEstimatedPosition().getX());
+        System.out.println(dEstimator.getEstimatedPosition().getY());
+
+
         StringBuilder sBuilder = new StringBuilder();
         sBuilder.append("leftDistance," + leftDistance() + ",");
         sBuilder.append("rightDistance," + rightDistance()+ ",");
@@ -175,7 +177,7 @@ public class driveTrain extends beanieDriveTrain {
     @Override
     public void teleopSetup() {
         // TODO Auto-generated method stub
-        this.setDefaultCommand(new joystickDrive(mDriveTrain, RobotContainer.driverController));
+        driveTrain.getInstance().setDefaultCommand(new joystickDrive(driveTrain.getInstance(), RobotContainer.driverController));
     }
 
 
