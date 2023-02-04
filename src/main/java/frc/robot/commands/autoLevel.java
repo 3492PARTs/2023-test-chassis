@@ -14,7 +14,7 @@ public class autoLevel extends CommandBase {
   PIDController angController;
   public autoLevel() {
     // Use addRequirements() here to declare subsystem dependencies.
-    angController = new PIDController(50f/17f, 0, 0);
+    angController = new PIDController(.01f/8f, 0, 0);
     addRequirements(driveTrain.getInstance());
     angController.setSetpoint(0);
     angController.setTolerance(3);
@@ -27,8 +27,8 @@ public class autoLevel extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   double output = angController.calculate(driveTrain.getInstance().getYaw());
-    output = MathUtil.clamp(output, -.2, .2);
+   double output = angController.calculate(driveTrain.getInstance().getRoll());
+    output = MathUtil.clamp(output, -.02, .02);
     driveTrain.getInstance().move(output, output);
   }
 

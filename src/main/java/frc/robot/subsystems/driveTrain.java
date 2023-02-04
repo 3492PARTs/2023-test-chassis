@@ -152,9 +152,6 @@ public class driveTrain extends beanieDriveTrain {
         Logger.info(sBuilder.toString());
 
         Logger.flush();
-
-
-        
     }
 
     @Override
