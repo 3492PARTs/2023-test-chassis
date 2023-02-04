@@ -71,7 +71,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  static PathPlannerTrajectory traj = PathPlanner.loadPath("New Path", new PathConstraints(1, 1));
+  static PathPlannerTrajectory traj = PathPlanner.loadPath("New New Path", new PathConstraints(1, 1));
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous

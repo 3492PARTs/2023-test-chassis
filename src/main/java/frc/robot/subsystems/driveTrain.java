@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 
@@ -164,7 +165,7 @@ public class driveTrain extends beanieDriveTrain {
 
     public BiConsumer<Double, Double> getBiConsumer() {
         BiConsumer<Double, Double> biC = (leftVoltage, rightVoltage) -> {
-          leftControllerGroup.setVoltage(leftVoltage);
+          leftControllerGroup.setVoltage(-leftVoltage);
           rightControllerGroup.setVoltage(rightVoltage);
           super.mDrive.feed();  
         };
@@ -227,8 +228,8 @@ public class driveTrain extends beanieDriveTrain {
         new SimpleMotorFeedforward(ks, kv, ka),
         driveTrain.getInstance().getKinematics(),
         driveTrain.getInstance().getWheelSpeedSupplier(),
-        new PIDController(0, 0, 0), // Left controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-        new PIDController(0, 0, 0),
+        new PIDController(.06, 0, 0), // Left controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+        new PIDController(.06, 0, 0),
         driveTrain.getInstance().getBiConsumer(),
         this
         );
