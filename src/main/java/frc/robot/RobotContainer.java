@@ -75,7 +75,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new autoLevel();
+    return driveTrain.getInstance().followTrajectoryCommand(traj, true);
     //return driveTrain.getInstance().followTrajectoryCommand(traj, true);
   }
 }
