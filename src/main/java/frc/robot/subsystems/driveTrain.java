@@ -45,11 +45,18 @@ public class driveTrain extends beanieDriveTrain {
  
   private final Field2d m_field = new Field2d();
 
-    static CANSparkMax left1 = new CANSparkMax(18, MotorType.kBrushless);
-    static CANSparkMax left2 = new CANSparkMax(23, MotorType.kBrushless);
+    // static CANSparkMax left1 = new CANSparkMax(18, MotorType.kBrushless);
+    // static CANSparkMax left2 = new CANSparkMax(23, MotorType.kBrushless);
 
-    static CANSparkMax right1 = new CANSparkMax(24, MotorType.kBrushless);
-    static CANSparkMax right2 = new CANSparkMax(12, MotorType.kBrushless);
+    // static CANSparkMax right1 = new CANSparkMax(24, MotorType.kBrushless);
+    // static CANSparkMax right2 = new CANSparkMax(12, MotorType.kBrushless);
+
+
+    static CANSparkMax left1 = new CANSparkMax(10, MotorType.kBrushless);
+    static CANSparkMax left2 = new CANSparkMax(20, MotorType.kBrushless);
+
+    static CANSparkMax right1 = new CANSparkMax(7, MotorType.kBrushless);
+    static CANSparkMax right2 = new CANSparkMax(9, MotorType.kBrushless);
 
     
 
