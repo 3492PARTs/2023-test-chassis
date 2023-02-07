@@ -58,7 +58,7 @@ public class cameraSystem extends SubsystemBase {
   public cameraSystem() {
     camList.add(new Pair<PhotonCamera, Transform3d>(cam, robotToCam));
     try {
-      aprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFields.kDefaultField.toString());
+      aprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFields.kDefaultField.m_resourceFile);
     
       } catch (Exception e) {
         // TODO: handle exception

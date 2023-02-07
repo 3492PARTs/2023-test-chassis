@@ -184,7 +184,7 @@ public class driveTrain extends beanieDriveTrain {
     @Override
     public void teleopSetup() {
         // TODO Auto-generated method stub
-        driveTrain.getInstance().setDefaultCommand(new joystickDrive(driveTrain.getInstance(), RobotContainer.driverController));
+        //driveTrain.getInstance().setDefaultCommand(new joystickDrive(driveTrain.getInstance(), RobotContainer.driverController));
     }
 
 
