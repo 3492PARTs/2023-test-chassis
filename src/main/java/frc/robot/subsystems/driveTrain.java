@@ -184,6 +184,9 @@ public class driveTrain extends beanieDriveTrain {
     public void periodic() {
         // This method will be called once per scheduler run
 
+        System.out.println("x: " + dEstimator.getEstimatedPosition().getX());
+        System.out.println("y: " + dEstimator.getEstimatedPosition().getY());
+
         m_field.setRobotPose(dEstimator.getEstimatedPosition());
 
     }
