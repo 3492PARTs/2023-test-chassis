@@ -12,31 +12,45 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPRamseteCommand;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import PARTSlib2023.PARTS.frc.Utils.Interfaces.beanieDriveTrain;
 
 import PARTSlib2023.PARTS.frc.Utils.logging.Logger;
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotWheelSize;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 
 public class driveTrain extends beanieDriveTrain {
 
 
 
  
-  private final Field2d m_field = new Field2d();
+  private final Field2d sim_field = new Field2d();
   
 
     // static CANSparkMax left1 = new CANSparkMax(18, MotorType.kBrushless);
@@ -51,6 +65,21 @@ public class driveTrain extends beanieDriveTrain {
 
     static CANSparkMax right1 = new CANSparkMax(20, MotorType.kBrushless);
     static CANSparkMax right2 = new CANSparkMax(12, MotorType.kBrushless);
+
+    private Field2d m_field = new Field2d();
+
+    SimDouble m_simAngle;
+
+    
+    private DifferentialDrivetrainSim m_driveSim = DifferentialDrivetrainSim.createKitbotSim(
+      KitbotMotor.kDoubleNEOPerSide, // 2 CIMs per side.
+      KitbotGearing.k8p45,        // 10.71:1
+      KitbotWheelSize.kSixInch,    // 6" diameter wheels.
+      null                         // No measurement noise.
+    );
+
+
+
 
     
 
@@ -75,6 +104,17 @@ public class driveTrain extends beanieDriveTrain {
   public driveTrain() {
     super(new AHRS() , new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));     
     Shuffleboard.getTab("primary").add(m_field);
+    if(Robot.isSimulation()){
+      REVPhysicsSim.getInstance().addSparkMax(left1, DCMotor.getNeo550(1));
+      REVPhysicsSim.getInstance().addSparkMax(left2, DCMotor.getNeo550(1));
+      REVPhysicsSim.getInstance().addSparkMax(right1, DCMotor.getNeo550(1));
+      REVPhysicsSim.getInstance().addSparkMax(right2, DCMotor.getNeo550(1));
+
+      var simGYro = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
+
+      m_simAngle = new SimDouble((SimDeviceDataJNI.getSimValueHandle(simGYro, "Yaw")));
+      SmartDashboard.putData("Field", m_field);
+    }
   }
 
 
@@ -143,24 +183,9 @@ public class driveTrain extends beanieDriveTrain {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        dEstimator.update(getRotation(), leftDistance(), rightDistance());
-        System.out.println("left distance" + leftDistance());
-        System.out.println("right distance:"+ rightDistance());
-        System.out.println(dEstimator.getEstimatedPosition().getX());
-        System.out.println(dEstimator.getEstimatedPosition().getY());
 
+        m_field.setRobotPose(dEstimator.getEstimatedPosition());
 
-        StringBuilder sBuilder = new StringBuilder();
-        sBuilder.append("leftDistance," + leftDistance() + ",");
-        sBuilder.append("rightDistance," + rightDistance()+ ",");
-        sBuilder.append("angle," + getRotation().getDegrees() + ",");
-        sBuilder.append("leftVelocity," + getLeftVelocity() + ",");
-        sBuilder.append("rightVelocity," + getRightVelocity() + ",");
-        sBuilder.append("displacement" + Math.sqrt(Math.pow(dEstimator.getEstimatedPosition().getX(), 2) + Math.pow(dEstimator.getEstimatedPosition().getY(), 2)) + ",");
-        
-        Logger.info(sBuilder.toString());
-
-        Logger.flush();
     }
 
     @Override
@@ -244,6 +269,28 @@ public class driveTrain extends beanieDriveTrain {
 
     return controller1;
  }
+
+ 
+
+public void simulationPeriodic() {
+  // Set the inputs to the system. Note that we need to convert
+  // the [-1, 1] PWM signal to voltage by multiplying it by the
+  // robot controller voltage.
+
+  // Advance the model by 20 ms. Note that if you are running this
+  // subsystem in a separate thread or have changed the nominal timestep
+  // of TimedRobot, this value needs to match it.
+
+
+
+  if(Robot.isSimulation()){
+    REVPhysicsSim.getInstance().run();
+  }
+
+
+  // Update all of our sensors.
+
+}
 
 
 

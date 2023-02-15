@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_robotContainer.getAutonomousCommand().schedule();
+    //m_robotContainer.getAutonomousCommand().schedule();
   
   }
 
@@ -74,6 +74,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
 
     new updatePoseVisually().schedule();
+    driveTrain.getInstance().moveVolts(8, 8);
 
   }
 
