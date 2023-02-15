@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.updatePoseVisually;
 import frc.robot.subsystems.driveTrain;
 
 /**
@@ -50,6 +51,8 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -62,18 +65,16 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    m_robotContainer.getAutonomousCommand().schedule();
+  
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    driveTrain.getInstance().moveVolts(8, 8);
+
+    new updatePoseVisually().schedule();
+
   }
 
   @Override
@@ -84,24 +85,35 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
+
+      driveTrain.getInstance().teleopSetup();
+
+    
     }
 
-    driveTrain.getInstance().teleopSetup();
+    //driveTrain.getInstance().setDefaultCommand(new joystickDrive(dTrain, new beanieController(0)));;
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    new updatePoseVisually().schedule();
+
+    driveTrain.getInstance().moveArcade(m_robotContainer.driverController.getLeftYAxis(), m_robotContainer.driverController.getRightXAxis());
+  }
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+
   }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override
