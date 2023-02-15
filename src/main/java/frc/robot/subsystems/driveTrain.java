@@ -42,8 +42,10 @@ import frc.robot.RobotContainer;
 public class driveTrain extends beanieDriveTrain {
 
 
+
  
   private final Field2d m_field = new Field2d();
+  
 
     // static CANSparkMax left1 = new CANSparkMax(18, MotorType.kBrushless);
     // static CANSparkMax left2 = new CANSparkMax(23, MotorType.kBrushless);
@@ -52,11 +54,11 @@ public class driveTrain extends beanieDriveTrain {
     // static CANSparkMax right2 = new CANSparkMax(12, MotorType.kBrushless);
 
 
-    static CANSparkMax left1 = new CANSparkMax(10, MotorType.kBrushless);
-    static CANSparkMax left2 = new CANSparkMax(20, MotorType.kBrushless);
+    static CANSparkMax left1 = new CANSparkMax(9, MotorType.kBrushless);
+    static CANSparkMax left2 = new CANSparkMax(24, MotorType.kBrushless);
 
-    static CANSparkMax right1 = new CANSparkMax(7, MotorType.kBrushless);
-    static CANSparkMax right2 = new CANSparkMax(9, MotorType.kBrushless);
+    static CANSparkMax right1 = new CANSparkMax(20, MotorType.kBrushless);
+    static CANSparkMax right2 = new CANSparkMax(12, MotorType.kBrushless);
 
     
 
@@ -81,6 +83,8 @@ public class driveTrain extends beanieDriveTrain {
     super(new AHRS() , new MotorControllerGroup(left1, left2), new MotorControllerGroup(right1, right2));     
     Shuffleboard.getTab("primary").add(m_field);
   }
+
+
 
   
   public static driveTrain getInstance() {
